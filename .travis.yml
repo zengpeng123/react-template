@@ -13,7 +13,7 @@ install:
 before_script:
 
 script:
-  - npm run release # 打包发布构建项目
+  - npm run build # 打包
 
 after_script: # 推送到github的部分
   - cd ./build
@@ -22,7 +22,7 @@ after_script: # 推送到github的部分
   - git config user.email "1042289178@qq.com"
   - git add .
   - git commit -m "release version"
-  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:${P_BRANCH} # 通过之前存在Travis-CI里的token以及github仓库的地址推送到相应的master分支
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:${P_BRANCH} # 通过之前存在Travis-CI里的token以及github仓库的地址推送到相应的分支
 # E: Build LifeCycle
 
 #指定分支，只有指定的分支提交时才会运行脚本
@@ -33,3 +33,13 @@ branches:
 env: # 环境变量
   global:
     # - GH_REF: github.com/zengpeng123/react-template.git # 我的仓库地址,我将其添加到了travis-ci的环境变量中
+
+# 发布版本
+deploy:
+  provider: releases
+  api_key:
+    secure: ${GH_TOKEN}
+  # file: react-template.zip
+  skip_cleanup: true
+  on:
+    tags: true
